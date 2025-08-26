@@ -9,12 +9,14 @@
     border: 0;
     border-radius: 50%;
 }
-.display {
+.display-container {
     padding-top: 100px;
 }
-.display input {
+.display-container input {
     background-color: black;
     border: none;
+    padding: 0px 30px 0px 30px;
+    font-size: 58px;
 }
 .custom-background-color-ligt-gray {
     background-color: #5C5C5F;
