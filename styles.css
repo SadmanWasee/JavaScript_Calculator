@@ -1,0 +1,27 @@
+.calculator {
+    background-color: #000000;
+    max-width: 500px;
+
+}
+.calculator-button {
+    width: 75px;
+    height: 75px;
+    border: 0;
+    border-radius: 50%;
+}
+.display {
+    padding-top: 100px;
+}
+.display input {
+    background-color: black;
+    border: none;
+}
+.custom-background-color-ligt-gray {
+    background-color: #5C5C5F;
+}
+.custom-background-color-dark-liver {
+    background-color: #2A2A2C;
+}
+.custom-background-color-vivid-gamboge {
+    background-color: #FF9500;
+}
