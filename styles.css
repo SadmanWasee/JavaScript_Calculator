@@ -1,29 +1,35 @@
 .calculator {
-    background-color: #000000;
-    max-width: 500px;
+  background-color: #000000;
+  max-width: 500px;
 
 }
+
 .calculator-button {
-    width: 75px;
-    height: 75px;
-    border: 0;
-    border-radius: 50%;
+  width: 75px;
+  height: 75px;
+  border: 0;
+  border-radius: 50%;
 }
+
 .display-container {
-    padding-top: 100px;
+  padding-top: 70px;
 }
+
 .display-container input {
-    background-color: black;
-    border: none;
-    padding: 0px 30px 0px 30px;
-    font-size: 58px;
+  background-color: black;
+  border: none;
+  padding: 0px 30px 0px 30px;
+  font-size: 58px;
 }
+
 .custom-background-color-ligt-gray {
-    background-color: #5C5C5F;
+  background-color: #5C5C5F;
 }
+
 .custom-background-color-dark-liver {
-    background-color: #2A2A2C;
+  background-color: #2A2A2C;
 }
+
 .custom-background-color-vivid-gamboge {
-    background-color: #FF9500;
+  background-color: #FF9500;
 }
