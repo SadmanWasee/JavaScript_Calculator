@@ -4,155 +4,105 @@ function cleardisplay() {
   display.value = "";
 }
 
-function addtodisplay(character) {
-  display.value += character;
+function addToDisplay(element) {
+  display.value += element;
 }
 
-function checkZeroDivisionError(expArr) {
-  for (let x in expArr) {
-    if (expArr[x] == '/') {
-      if (expArr[x + 1] == '0') {
-        return false
-      }
+function safeAddToDisplay(element) {
+  let displayValue = display.value;
+  if (displayValue.endsWith('+') || displayValue.endsWith('-') || displayValue.endsWith('*') || displayValue.endsWith('/')) {
+    displayValue = displayValue.slice(0, -1) + element
+    display.value = displayValue
+  } else if (displayValue.endsWith('.')) {
+
+  }
+  else if (display.value !== "") {
+    display.value += element
+  }
+}
+
+function addFloatingPointToDisplay(element) {
+  let displayValue = display.value;
+  let regex = /(\d+\.?\d*)|([+\-*/%()])/g;
+  let displayValueArr = displayValue.match(regex);
+
+  if (displayValueArr != null) {
+    if (!isNaN(+displayValueArr[displayValueArr.length - 1])) {
+      if (!(displayValueArr[displayValueArr.length - 1]).includes('.'))
+        display.value += element;
+    }
+    else {
+      display.value += ("0" + element);
     }
   }
-  return true
+  else {
+    display.value += ("0" + element);
+  }
 }
 
-function checkIsNotNumberError(expArr) {
-  if (expArr[0] == '/' || expArr[0] == '*') {
-    return false;
-  }
-  if (expArr[-1] == '/' || expArr[-1] == '*' || expArr[-1] == '+' || expArr[-1] == '-') {
-    return false;
-  }
-  for (let x in expArr) {
-    if (expArr[x] == '/' || expArr[x] == '*') {
-      if (isNaN(+expArr[x - 1]) && isNaN(+expArr[x + 1])) {
-        return false;
-      }
-    }
-  }
-  return true
-}
-
-function validate(expArr) {
-  let validty = checkZeroDivisionError(expArr);
-  validty = checkIsNotNumberError(expArr);
-  return validty;
-}
-
-function perfromDivison(expArr) {
+function perfromDivisonAndMultiplication(expArr) {
   //We will loop through the arry to check whether there is any division operation or not
   let x = 0;
   while (x < expArr.length) {
     if (expArr[x] == '/') {
       //If there is any division operator we will find the number preceeding and succeeding the division operator
-      let num1 = Number(expArr[x - 1]);
-      let num2 = Number(expArr[x + 1]);
+      let num1 = parseFloat(expArr[x - 1]);
+      let num2 = parseFloat(expArr[x + 1]);
       //We will perform the division operation and assign it to the index of preceeding element.
       let result = num1 / num2;
-      expArr[x - 1] = result;
-      //Now we will assign rest of the elements after the result 
-      let i = x; //index after the result
-      let j = x + 2; //index after the second operand 
-      while (j < expArr.length) {
-        expArr[i] = expArr[j]; //copying the element that succeeds the second operand
-        i++;
-        j++;
+      if (result == "Infinity") {
+        display.value = "Error"
+        return;
       }
-      //We will delete the elements after th ith index to avoid duplcate value
-      expArr.splice(i, expArr.length);
-      //We will continue looping from the xth location as it may now bare the '/' operator again
-      continue;
+      expArr[x - 1] = result;
+      //We will delete the xth and (x+1)th elements to as they have been operated on
+      expArr.splice(x, 2);
+      x--;
     }
-    x++;
-  }
-  return expArr
-}
-
-function perfromMultiplication(expArr) {
-  //We will loop through the arry to check whether there is any operation or not
-  let x = 0;
-  while (x < expArr.length) {
     if (expArr[x] == '*') {
-      //If there is any division operator we will find the number preceeding and succeeding the operator
-      let num1 = Number(expArr[x - 1]);
-      let num2 = Number(expArr[x + 1]);
-      //We will perform the division operation and assign it to the index of preceeding element.
+      //If there is any multiplication operator we will find the number preceeding and succeeding the operator
+      let num1 = parseFloat(expArr[x - 1]);
+      let num2 = parseFloat(expArr[x + 1]);
+      //We will perform the operation and assign it to the index of preceeding element.
       let result = num1 * num2;
       expArr[x - 1] = result;
-      //Now we will assign rest of the elements after the result 
-      let i = x; //index after the result
-      let j = x + 2; //index after the second operand 
-      while (j < expArr.length) {
-        expArr[i] = expArr[j]; //copying the element that succeeds the second operand
-        i++;
-        j++;
-      }
-      //We will delete the elements after th ith index to avoid duplcate value
-      expArr.splice(i, expArr.length);
-      //We will continue looping from the xth location as it may now bare the operator again
-      continue;
+      //We will delete the xth and (x+1)th elements to as they have been operated on
+      expArr.splice(x, 2);
+      x--;
     }
     x++;
   }
   return expArr
-
 }
 
-function perfromAdition(expArr) {
+
+function perfromAditionAndSubtraction(expArr) {
   //We will loop through the arry to check whether there is any operation or not
   let x = 0;
   while (x < expArr.length) {
     if (expArr[x] == '+') {
-      //If there is any division operator we will find the number preceeding and succeeding the operator
-      let num1 = Number(expArr[x - 1]);
-      let num2 = Number(expArr[x + 1]);
-      //We will perform the division operation and assign it to the index of preceeding element.
+      //If there is any addition operator we will find the number preceeding and succeeding the operator
+      let num1 = parseFloat(expArr[x - 1]);
+      let num2 = parseFloat(expArr[x + 1]);
+      //We will perform the operation and assign it to the index of preceeding element.
       let result = num1 + num2;
       expArr[x - 1] = result;
-      //Now we will assign rest of the elements after the result 
-      let i = x; //index after the result
-      let j = x + 2; //index after the second operand 
-      while (j < expArr.length) {
-        expArr[i] = expArr[j]; //copying the element that succeeds the second operand
-        i++;
-        j++;
-      }
-      //We will delete the elements after th ith index to avoid duplcate value
-      expArr.splice(i, expArr.length);
-      //We will continue looping from the xth location as it may now bare the operator again
+      //We will delete the xth and (x+1)th elements as they have been operated on
+      expArr.splice(x, 2);
+      // Step back one index, in case another '/' follows
+      x--;
       continue;
     }
-    x++;
-  }
-  return expArr
-
-}
-
-function perfromSubtraction(expArr) {
-  //We will loop through the arry to check whether there is any - operation or not
-  let x = 0;
-  while (x < expArr.length) {
     if (expArr[x] == '-') {
-      //If there is any division operator we will find the number preceeding and succeeding the operator
-      let num1 = Number(expArr[x - 1]);
-      let num2 = Number(expArr[x + 1]);
-      //We will perform the division operation and assign it to the index of preceeding element.
+      //If there is any subtraction operator we will find the number preceeding and succeeding the operator
+      let num1 = parseFloat(expArr[x - 1]);
+      let num2 = parseFloat(expArr[x + 1]);
+      //We will perform the operation and assign it to the index of preceeding element.
       let result = num1 - num2;
       expArr[x - 1] = result;
-      //Now we will assign rest of the elements after the result 
-      let i = x; //index after the result
-      let j = x + 2; //index after the second operand 
-      while (j < expArr.length) {
-        expArr[i] = expArr[j]; //copying the element that succeeds the second operand
-        i++;
-        j++;
-      }
-      //We will delete the elements after th ith index to avoid duplcate value
-      expArr.splice(i, expArr.length);
-      //We will continue looping from the xth location as it may now bare the operator again
+      //We will delete the xth and (x+1)th elements as they have been operated on
+      expArr.splice(x, 2);
+      x--;
       continue;
     }
     x++;
@@ -160,30 +110,22 @@ function perfromSubtraction(expArr) {
   return expArr
 
 }
+
 
 function calculate() {
   //Taking the value from the display and splitting it into array of numbers and operators
   let expression = display.value;
   let regex = /(\d+\.?\d*)|([+\-*/%()])/g;
   let expArr = expression.match(regex);
-  //At frist we will validate whether the expression is ok or not
-  let valid = validate(expArr);
   //If ok we will proceed to perform operations
-  if (valid == true) {
-    //At first we will perform division
-    expArr = perfromDivison(expArr);
-    //Then multiplication 
-    expArr = perfromMultiplication(expArr);
-    //Then Addition 
-    expArr = perfromAdition(expArr);
-    //Then Subtraction
-    expArr = perfromSubtraction(expArr);
-
-    display.value = expArr[0];
+  //At first we will perform division and multiplication
+  expArr = perfromDivisonAndMultiplication(expArr);
+  expArr = perfromAditionAndSubtraction(expArr);
+  if (isNaN(expArr[0])) {
+    display.value = "Error";
   }
-  //Or else give error message
   else {
-    display.value = "Error"
+    display.value = expArr[0];
   }
 
 }
