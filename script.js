@@ -4,7 +4,7 @@ let clearDisplay = () => {
   display.value = "";
 }
 
-let checkZero_division_error = (expArr) => {
+let checkZeroDivisionError = (expArr) => {
   let count = expArr.length - 1
 
   for (let i = 0; i < count; i++) {
@@ -28,9 +28,10 @@ let addToDisplay = (element) => {
 
     //If the display value arr is not null
     if (displayValueArr != null) {
-      //we will check if the last element is a number or an operator
-      last_element = displayValueArr[displayValueArr.length - 1]
 
+      
+      last_element = displayValueArr[displayValueArr.length - 1]
+      //we will check if the last element is a number or an operator
       if (!isNaN(+last_element)) {
 
         //we will check if the number does not include decimal point
@@ -125,7 +126,7 @@ let operate = (expArr, x) => {
       break;
   }
 
-  expArr[x - 1] = result;//
+  expArr[x - 1] = result;//The result will be placed on the index of the first operand
   expArr.splice(x, 2);//We will delete the xth and (x+1)th elements as they have been operated on
 
   return expArr;
@@ -181,15 +182,6 @@ let nextCalculation = (expArr) => {
   return expArr
 }
 
-//We need to handle addition and subtraction together because they have same precedence the left most addition and subtraction will be done first
-let perfromAditionAndSubtraction = (expArr) => {
-  //We will loop through the array to check whether there is any + and - operation or not
-  let x = 0;
-  let count = expArr.length;
-
-  return expArr
-}
-
 
 let calculate = () => {
   //Taking the value from the display and splitting it into array of numbers and operators
@@ -202,7 +194,7 @@ let calculate = () => {
   let last_element_is_operator = ["+", "-", "*", "/"].includes(last_element);
 
   //Checking for zero division error
-  let has_zero_division_error = checkZero_division_error(expArr)
+  let has_zero_division_error = checkZeroDivisionError(expArr)
 
   //We will calculate only if a valid expression has been entered & last element is not an operator & does not have zero division error
   if (expArr.length >= 3 && !last_element_is_operator && !has_zero_division_error) {
@@ -215,12 +207,13 @@ let calculate = () => {
     //We are enforcing the PEMDAS rule for simplification using this function
     expArr = nextCalculation(expArr);
 
-    //If the element a 0th index is Not A Number we will display error message
+    //If the element on 0th index is Not A Number we will display error message
     if (isNaN(expArr[0])) {
       display.value = "Error";
     }
 
-    //Else we will find it the result is a decicmal number at first if it is then we will make it two decimal places or just print it in display
+    //Else we will find if the result is a decicmal number, if it is then we will make it two decimal places 
+    //If it is not a decimal number then just print it in display
     else {
       let result = parseFloat(expArr[0]);
       if (result % 1 !== 0) {
