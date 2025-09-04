@@ -1,4 +1,5 @@
 const display = document.getElementById("display");
+let flag = 0;
 
 let clearDisplay = () => {
   display.value = "";
@@ -19,6 +20,10 @@ let checkZeroDivisionError = (expArr) => {
 let addToDisplay = (element) => {
   let operators = ['+', '-', '*', '/'];
   let displayValue = display.value;
+  if(flag==1){
+    clearDisplay();
+    flag=0;
+  }
 
   //Handling decimal point case 
   if (element == ".") {
@@ -216,10 +221,9 @@ let calculate = () => {
     //If it is not a decimal number then just print it in display
     else {
       let result = parseFloat(expArr[0]);
-      if (result % 1 !== 0) {
-        result = result.toFixed(2)
-      }
+      
       display.value = result;
+      flag=1
     }
   }
 }
